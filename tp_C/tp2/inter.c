@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include "thefunctionstp2.h"
 
 void initialt(int *tab, int taille, int max_val) {
     for (int i = 0; i < taille; i++) {
@@ -20,6 +21,61 @@ int is_sorted(int *tab,int taille){
     }
     return 0;
 }
+
+void swap(int *a,int*b){
+    int temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+void quicksort(int *tab,int left,int right){
+    if (left<right){
+        int temp=tab[left];
+        int start =left;
+        int end=right;
+        while(left<right){
+            while(tab[left]<=temp && left<end) left++;
+            while (tab[right]>temp) right--;
+            if (left<right) swap (&tab[left],&tab[right]);
+        }//The Scouts find the border: By crossing each other, 
+        //the scouts have signaled: "Hey! Everything from 
+        //index 0 to 3 is Small, and everything from 4 to 5 is Big."
+        swap(&tab[start],&tab[right]);
+        quicksort(tab,start,right-1);
+        quicksort(tab,right+1, end);
+    }
+}
+void newswap(int *tab,int i,int j){
+    int temp=tab[i];
+    tab[i]=tab[j];
+    tab[j]=temp;
+}
+
+int comarison(int i, int j){
+    if(i<j) return 1;
+    return 0;
+}
+int comparison_descending(int i, int j) {
+    return i > j; // Returns 1 if i is bigger, pushing bigger numbers to the left
+}
+void newsort(int (*comparison)(int, int), int *tab,int left, int right){
+    if (right-left>0){
+        int temp=left;
+        int st=left+1;
+        int en=right;
+
+        while(st<=en){
+            if (comparison(tab[st],tab[temp])!=0) st++;
+            else newswap(tab, st, en--);
+        }
+        newswap(tab,temp, en);
+        newsort(comparison,tab,left,en-1);
+        newsort(comparison,tab,en+1,right);
+    }
+
+}
+
+
 
 int main(void){
     int ex[6]={2,5,6,4,1,2};
